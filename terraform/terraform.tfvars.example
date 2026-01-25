@@ -1,0 +1,17 @@
+# ==============================================================================
+# SQUAD 3 - OCI VALUES (PRIVATE)
+# Instrução: Exemplo de Configuração de Acesso OCI (TERRAFORM)
+# ==============================================================================
+
+# --- 1. CREDENCIAIS DE API (Autenticação) ---
+tenancy_ocid     = "ocid1.tenancy.oc1..aaaaaaaaxxxxxxxxxxxxxxxxxxx"
+user_ocid        = "ocid1.user.oc1..aaaaaaaaxxxxxxxxxxxxxxxxxxx"
+fingerprint      = "xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx"
+private_key_path = "~/.oci/oci_api_key.pem"
+region           = "sa-saopaulo-1"
+
+# --- 2. CONFIGURAÇÕES DE INFRAESTRUTURA ---
+compartment_id    = "ocid1.compartment.oc1..aaaaaaaaxxxxxxxxxxxxxxxxxxx"
+os_namespace      = "namespace_aqui"  # Ex: gr7abcd1234
+instance_image_id = "ocid1.image.oc1.sa-saopaulo-1.aaaaaaaa..."
+ssh_public_key    = "ssh-rsa AAAAB3..." 
