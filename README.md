@@ -2,7 +2,7 @@
 
 Repositório de desenvolvimento, documentação e implementação técnica de solução integrada de dados para o Hackathon da Pod Academy - Squad 3. 
 
-Este repositório foca na sustentação do ecossistema, abrangendo o provisionamento de infraestrutura escalável, a orquestração dos fluxos e as estratégias de ingestão nativas para a nuvem da Oracle.
+> Este repositório foca na sustentação do ecossistema, abrangendo o provisionamento de infraestrutura escalável, a orquestração dos fluxos e as estratégias de ingestão nativas para a nuvem da Oracle.
 
 ---
 
