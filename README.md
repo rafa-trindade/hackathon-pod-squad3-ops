@@ -11,7 +11,6 @@ Repositório de desenvolvimento, documentação e implementação técnica da ca
 > 🔐 O Core define **o que** a arquitetura executa.  
 > ⚙️ O Ops define **como e onde** ela é executada.
 
----
 
 ## 📖 Navegação Técnica (Documentação)
 
@@ -21,7 +20,6 @@ Para uma compreensão aprofundada de cada camada da operação, explore os guias
 * **📊 [Arquitetura de Dados](docs/data_architecture/README.md):** Fluxo de ingestão, camadas Medallion e governança no DuckDB.
 * **🚀 [Guia de Deployment](docs/setup/deployment.md):** Passo a passo para provisionamento via Terraform e ativação do ambiente.
 
----
 
 ## 🛠️ Stack Tecnológica & Hardware Strategy
 
@@ -32,12 +30,13 @@ A arquitetura de processamento foi desenhada em duas fases para otimização de 
 * **Recursos:** 4 OCPUs | 24GB RAM
 * **Custo:** Always Free Tier (OCI)
 
-### **Fase 2: Produção Oficial (Enterprise)**
+---
+
+### **Fase 2: Produção Oficial (Patrocinado)**
 * **Shape:** `VM.Standard.E4.Flex` (AMD EPYC™)
 * **Recursos:** 8 OCPUs | 64GB RAM (Escalável)
 * **Objetivo:** Alta performance para o motor DuckDB e paralelismo total de DAGs.
 
----
 
 ## 📂 Localização dos Projetos na VM (Cloud Path)
 
