@@ -17,7 +17,7 @@ Repositório de desenvolvimento, documentação e implementação técnica da ca
 Para uma compreensão aprofundada de cada camada da operação, explore os guias detalhados abaixo:
 
 * **🏗️ [Infraestrutura Cloud](docs/infrastructure/architecture.md):** Detalhamento da rede, segurança (IAM/Instance Principal) e hardware.
-* **📊 [Arquitetura de Dados](docs/data_architecture/README.md):** Fluxo de ingestão, camadas Medallion e governança no DuckDB.
+* **📊 [Arquitetura de Dados](docs/data_architecture/README.md):** Fluxo de ingestão, camadas Medallion e governança.
 * **🚀 [Guia de Deployment](docs/setup/deployment.md):** Passo a passo para provisionamento via Terraform e ativação do ambiente.
 
 
