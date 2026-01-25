@@ -1,0 +1,87 @@
+# ==============================================================================
+# SQUAD 3 - ORCHESTRATION ENGINE (AIRFLOW STACK)
+# Objetivo: Sustentação operacional dos pipelines via Docker Compose
+# ==============================================================================
+x-airflow-common: &airflow-common
+  image: apache/airflow:${AIRFLOW_IMAGE_TAG:-2.7.1}
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:${POSTGRES_PASSWORD:-airflow}@postgres/airflow
+    AIRFLOW__CORE__FERNET_KEY: ''
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__DAG_DISCOVERY_SAFE_MODE: 'false'
+    PYTHONPATH: /opt/airflow/core
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+    
+    EXECUTION_ENVIRONMENT: ${EXECUTION_ENVIRONMENT:-cloud}
+    
+    MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+    MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+    MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+    MINIO_REGION: ${MINIO_REGION}
+
+    OCI_S3_ENDPOINT: ${OCI_S3_ENDPOINT}
+    OCI_ACCESS_KEY: ${OCI_ACCESS_KEY}
+    OCI_SECRET_KEY: ${OCI_SECRET_KEY}
+    OCI_REGION: ${OCI_REGION}
+    OCI_NAMESPACE: ${OCI_NAMESPACE}
+
+    S3_ENDPOINT: ${OCI_S3_ENDPOINT}
+    AWS_ACCESS_KEY_ID: ${OCI_ACCESS_KEY}
+    AWS_SECRET_ACCESS_KEY: ${OCI_SECRET_KEY}
+    AWS_DEFAULT_REGION: ${OCI_REGION}
+
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ./plugins:/opt/airflow/plugins
+    - ./requirements.txt:/opt/airflow/requirements.txt
+    - /home/opc/app/hackathon-pod-squad3-core:/opt/airflow/core
+    - ./squad3_access_keys:/opt/airflow/keys
+    
+  user: "${AIRFLOW_UID:-1000}:0"
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-airflow}
+      POSTGRES_DB: airflow
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    restart: always
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  airflow-init:
+    <<: *airflow-common
+    command: version
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-admin}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-admin}
