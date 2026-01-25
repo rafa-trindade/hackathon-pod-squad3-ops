@@ -1,0 +1,37 @@
+# --- Terraform ---
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.tfvars
+*.tfvars.json
+
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+
+# --- Segurança e Chaves ---
+*.pem
+*.key
+*.pub
+secrets.py
+.env
+
+# --- Docker & Airflow ---
+logs/
+airflow-webserver.pid
+standalone_admin_password.txt
+unittests.cfg
+.webserver_configs.cfg
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# --- Sistema ---
+.DS_Store
+Thumbs.db
