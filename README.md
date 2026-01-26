@@ -13,6 +13,7 @@ Repositório de desenvolvimento, documentação e implementação técnica da ca
 > 🔐 O Core define **o que** a arquitetura executa.  
 > ⚙️ O Ops define **como e onde** ela é executada.
 
+---
 
 ## 📖 Navegação Técnica (Documentação)
 
