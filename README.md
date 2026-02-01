@@ -20,8 +20,7 @@ Repositório de desenvolvimento, documentação e implementação técnica da ca
 
 >A governança das atividades é realizada por meio de quadros Kanban no **GitHub Projects**, integrando planejamento execução e versionamento. Esta divisão garante especialização técnica e transparência no progresso das frentes:   
 >
-> 🚦 **Quadros de Execução:** [`squad3-analytics`](https://github.com/users/rafa-trindade/projects/6) | [`squad3-core`](https://github.com/users/rafa-trindade/projects/4) | [`squad3-ops`](https://github.com/users/rafa-trindade/projects/8)
-
+> 🚦 **Backlogs de Desenvolvimento:** [`squad3-analytics`](https://github.com/users/rafa-trindade/projects/6) | [`squad3-core`](https://github.com/users/rafa-trindade/projects/4) | [`squad3-ops`](https://github.com/users/rafa-trindade/projects/8)
 ---
 
 ## 📖 Navegação Técnica (Documentação)
