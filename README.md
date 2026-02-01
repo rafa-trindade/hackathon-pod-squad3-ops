@@ -8,8 +8,8 @@ Repositório de desenvolvimento, documentação e implementação técnica da ca
 
 ### 🔗 Ecossistema Squad 3
 
-* **Repositório 1 de 2 (Core):** [hackathon-pod-squad3-core](https://github.com/rafa-trindade/hackathon-pod-squad3-core) – _Engine de processamento, arquitetura medalhão e gestão de performance com governança de dados nativa._
-* **Repositório 2 de 2 (Ops):** [hackathon-pod-squad3-ops](https://github.com/rafa-trindade/hackathon-pod-squad3-ops) – _Infraestrutura como código (IaC), orquestração de pipelines e estratégias de Cloud Readiness._
+* **Repositório 1 de 2 (Core):** [hackathon-pod-squad3-core](https://github.com/rafa-trindade/hackathon-pod-squad3-core) - _Engine de processamento, arquitetura medalhão e gestão de performance com governança de dados nativa._
+* **Repositório 2 de 2 (Ops):** [hackathon-pod-squad3-ops](https://github.com/rafa-trindade/hackathon-pod-squad3-ops) - _Infraestrutura como código (IaC), orquestração de pipelines e estratégias de Cloud Readiness._
 
 > 🔐 O Core define **o que** a arquitetura executa.  
 > ⚙️ O Ops define **como e onde** ela é executada.
