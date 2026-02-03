@@ -16,6 +16,17 @@ Repositório de desenvolvimento, documentação e implementação técnica da ca
 
 ---
 
+### 🔄 O Ciclo de Vida: Do Core ao Ops
+
+A arquitetura separa a **engine de processamento** da **sustentação de infraestrutura**, aplicando estratégias de **Cloud Readiness** para garantir escalabilidade, governança e alta disponibilidade:
+
+* **🧠 A Inteligência (Core):** Responsável pela lógica de negócio e transformação. É onde reside a **Engine de Processamento** que executa a arquitetura Medallion e garante a integridade dos dados. O Core possui **governança nativa**, sendo agnóstico à infraestrutura e funcionando como o motor de inteligência que define as regras de transformação e qualidade.
+* **🏗️ O Provisionamento (IaC):** O Ops entra em cena via **Terraform**, erguendo uma infraestrutura segura e resiliente na **OCI**. Através de **Instance Principals**, a VM ganha identidade própria, eliminando a necessidade de gerenciar chaves manuais e garantindo acesso nativo e seguro ao Object Storage.
+* **⚡ A Integração & Bootstrap:** No momento do deploy, o Ops realiza o bootstrap automatizado. O Airflow assume a responsabilidade de **sincronizar e atualizar os repositórios do Core**, garantindo que a versão mais recente do código de transformação esteja sempre disponível. O repositório Core é montado como um **volume persistente** dentro dos containers, fundindo a lógica de negócio à capacidade de escala da nuvem e permitindo atualizações de lógica sem necessidade de redeploy da infraestrutura.
+* **🎼 A Orquestração (Airflow):** O **Apache Airflow** assume o papel de maestro. Ele gerencia as DAGs que executam desde a ingestão (Bridge para OCI Object Storage) até o acionamento dos módulos do Core para transformar dados brutos em insights na camada Gold, fechando o ciclo de entrega de ponta a ponta.
+
+---
+
 ### 📋 Governança Operacional (Gestão de Backlog)
 
 >A governança das atividades é realizada por meio de quadros Kanban no **GitHub Projects**, integrando planejamento execução e versionamento. Esta divisão garante especialização técnica e transparência no progresso das frentes:   
