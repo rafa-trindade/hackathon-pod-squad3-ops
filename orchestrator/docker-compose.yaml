@@ -16,6 +16,7 @@ x-airflow-common: &airflow-common
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     
     EXECUTION_ENVIRONMENT: ${EXECUTION_ENVIRONMENT:-cloud}
+    DUCKDB_TEMP_DIR: ${DUCKDB_TEMP_DIR:-/tmp/duckdb_process}
     
     MINIO_ENDPOINT: ${MINIO_ENDPOINT}
     MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
@@ -40,6 +41,7 @@ x-airflow-common: &airflow-common
     - ./requirements.txt:/opt/airflow/requirements.txt
     - /home/opc/app/hackathon-pod-squad3-core:/opt/airflow/core
     - ./squad3_access_keys:/opt/airflow/keys
+    - /tmp/duckdb_storage:/tmp/duckdb_process
     
   user: "${AIRFLOW_UID:-1000}:0"
   depends_on:
