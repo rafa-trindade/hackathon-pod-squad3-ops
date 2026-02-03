@@ -16,9 +16,9 @@ Repositório de desenvolvimento, documentação e implementação técnica da ca
 
 ---
 
-### 🔄 O Ciclo de Vida: Do Core ao Ops
+### 🔄 O Ciclo de Vida: Do *Core* ao *Ops*
 
-A arquitetura separa a **engine de processamento** da **sustentação de infraestrutura**, aplicando estratégias de **Cloud Readiness** para garantir escalabilidade, governança e alta disponibilidade:
+A arquitetura separa a **engine de processamento** da **sustentação de infraestrutura**, aplicando estratégias de **Cloud Readiness** para garantir escalabilidade, governança nativa e alta disponibilidade:
 
 * **🧠 A Inteligência (Core):** Responsável pela lógica de negócio e transformação. É onde reside a **Engine de Processamento** que executa a arquitetura Medallion e garante a integridade dos dados. O Core possui **governança nativa**, sendo agnóstico à infraestrutura e funcionando como o motor de inteligência que define as regras de transformação e qualidade.
 * **🏗️ O Provisionamento (IaC):** O Ops entra em cena via **Terraform**, erguendo uma infraestrutura segura e resiliente na **OCI**. Através de **Instance Principals**, a VM ganha identidade própria, eliminando a necessidade de gerenciar chaves manuais e garantindo acesso nativo e seguro ao Object Storage.
