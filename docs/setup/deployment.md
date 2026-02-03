@@ -72,9 +72,8 @@ chmod +x verify-setup.sh
 ```bash
 cd /home/opc/app/hackathon-pod-squad3-ops/orchestrator
 
-cp .env.example.vm .env 
+cp .env.example .env
 
-mkdir -p ./logs ./plugins ./dags
 sudo chmod -R 777 ./logs ./plugins ./dags
 
 docker compose up airflow-init
