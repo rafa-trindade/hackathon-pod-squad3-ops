@@ -15,8 +15,10 @@ else
     echo "⚠️ Docker não encontrado, pulando interrupção."
 fi
 
-echo "--- [2/2]Limpando diretórios de logs e temporários ---"
+echo "--- [2/2] Limpando diretórios de logs e temporários ---"
 rm -rf /home/opc/app/logs/*
 rm -rf /home/opc/app/data_temp/*
+
+sudo rm -rf /tmp/duckdb_storage/*
 
 echo "--- AMBIENTE RESETADO COM SUCESSO ---"
