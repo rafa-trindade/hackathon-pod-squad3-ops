@@ -15,12 +15,12 @@ resource "oci_identity_dynamic_group" "compute_dg" {
 }
 
 resource "oci_identity_policy" "lake_access_policy" {
-  compartment_id = var.compartment_id
   name           = "squad3-vm-to-lake-policy"
   description    = "Permissoes automaticas para a VM gerenciar o Data Lake"
+  compartment_id = var.compartment_id
 
   statements = [
-    "Allow dynamic-group squad3-compute-dg to manage objects in bucket lake-squad3",
+    "Allow dynamic-group squad3-compute-dg to manage objects in compartment id ${var.compartment_id}",
     "Allow dynamic-group squad3-compute-dg to read buckets in compartment id ${var.compartment_id}"
   ]
 }
@@ -53,6 +53,7 @@ resource "oci_identity_user" "engineers" {
   for_each    = local.membros_eng
   name        = each.value
   description = "Engenheiro de Dados - Membro Squad 3"
+  email       = "${each.key}@squad3-ops.com"
 }
 
 resource "oci_identity_user_group_membership" "add_engineers" {
@@ -77,6 +78,7 @@ resource "oci_identity_user" "analysts" {
   for_each    = local.membros_analytics
   name        = each.value
   description = "Analista/Cientista de Dados - Membro Squad 3"
+  email       = "${each.key}@squad3-ops.com"
 }
 
 resource "oci_identity_user_group_membership" "add_analysts" {
@@ -97,9 +99,9 @@ resource "oci_identity_policy" "human_access_policy" {
   statements = [
     # Engenheiros mandam em tudo no compartimento do projeto
     "Allow group squad3-eng-group to manage all-resources in compartment id ${var.compartment_id}",
-    
+
     # Analistas apenas leem os dados brutos e processados no Lake
-    "Allow group squad3-analytics-group to read objects in bucket lake-squad3",
+    "Allow group squad3-analytics-group to read objects in compartment id ${var.compartment_id} where target.bucket.name = 'lake-squad3'",
     "Allow group squad3-analytics-group to inspect buckets in compartment id ${var.compartment_id}"
   ]
 }
