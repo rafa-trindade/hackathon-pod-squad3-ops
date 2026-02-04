@@ -1,7 +1,9 @@
+
 # ==============================================================================
 # SQUAD 3 - ORCHESTRATION ENGINE (AIRFLOW STACK)
 # Objetivo: Sustentação operacional dos pipelines via Docker Compose
 # ==============================================================================
+
 x-airflow-common: &airflow-common
   image: apache/airflow:${AIRFLOW_IMAGE_TAG:-2.7.1}
   environment:
@@ -12,23 +14,27 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__CORE__DAG_DISCOVERY_SAFE_MODE: 'false'
-    PYTHONPATH: /opt/airflow/core
+    PYTHONPATH: /opt/airflow/core:/opt/airflow
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     
     EXECUTION_ENVIRONMENT: ${EXECUTION_ENVIRONMENT:-cloud}
-    DUCKDB_TEMP_DIR: ${DUCKDB_TEMP_DIR:-/tmp/duckdb_process}
     
+    # Variáveis de Origem (MinIO)
     MINIO_ENDPOINT: ${MINIO_ENDPOINT}
     MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
     MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
     MINIO_REGION: ${MINIO_REGION}
+    MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
 
+    # Variáveis de Destino (OCI)
     OCI_S3_ENDPOINT: ${OCI_S3_ENDPOINT}
     OCI_ACCESS_KEY: ${OCI_ACCESS_KEY}
     OCI_SECRET_KEY: ${OCI_SECRET_KEY}
     OCI_REGION: ${OCI_REGION}
     OCI_NAMESPACE: ${OCI_NAMESPACE}
+    OCI_BUCKET_NAME: ${OCI_BUCKET_NAME}
 
+    # Compatibilidade com o Core (Mapeamento Direto)
     S3_ENDPOINT: ${OCI_S3_ENDPOINT}
     AWS_ACCESS_KEY_ID: ${OCI_ACCESS_KEY}
     AWS_SECRET_ACCESS_KEY: ${OCI_SECRET_KEY}
@@ -42,7 +48,7 @@ x-airflow-common: &airflow-common
     - ./requirements.txt:/opt/airflow/requirements.txt
     - /home/opc/app/hackathon-pod-squad3-core:/opt/airflow/core
     - ./squad3_access_keys:/opt/airflow/keys
-    - /tmp/duckdb_storage:/tmp/duckdb_process
+    - /mnt/nvme/duckdb_temp:/mnt/nvme/duckdb_temp
     
   user: "${AIRFLOW_UID:-1000}:0"
   depends_on:
