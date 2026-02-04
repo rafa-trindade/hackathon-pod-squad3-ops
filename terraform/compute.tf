@@ -3,7 +3,18 @@
 # Objetivo: Provisionar a VM de processamento e orquestração (Airflow/Docker)
 # ==============================================================================
 
+data "oci_core_images" "latest_ol9_arm" {
+  compartment_id           = var.compartment_id
+  operating_system         = "Oracle Linux"
+  operating_system_version = "9"
+  shape                    = "VM.Standard.A1.Flex"
+
+  sort_by    = "TIMECREATED"
+  sort_order = "DESC"
+}
+
 resource "oci_core_instance" "airflow_instance" {
+
   availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
   compartment_id      = var.compartment_id
   display_name        = "squad3-airflow-engine"
@@ -24,13 +35,13 @@ resource "oci_core_instance" "airflow_instance" {
 
   source_details {
     source_type = "image"
-    source_id   = var.instance_image_id 
+    source_id = data.oci_core_images.latest_ol9_arm.images[0].id
     boot_volume_size_in_gbs = 150 
   }
 
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
-    user_data           = base64encode(file("./scripts/cloud-init.sh"))
+    user_data           = base64encode(file("${path.module}/scripts/cloud-init.sh"))
   }
 
   lifecycle {

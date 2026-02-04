@@ -20,10 +20,20 @@ Repositório de desenvolvimento, documentação e implementação técnica da ca
 
 A arquitetura separa a **engine de processamento** da **sustentação de infraestrutura**, aplicando estratégias de **Cloud Readiness** para garantir escalabilidade, governança nativa e alta disponibilidade:
 
-* **🧠 A Inteligência (Core):** Responsável pela lógica de negócio e transformação. É onde reside a **Engine de Processamento** que executa a arquitetura Medallion e garante a integridade dos dados. O Core possui **governança nativa**, sendo agnóstico à infraestrutura e funcionando como o motor de inteligência que define as regras de transformação e qualidade.
-* **🏗️ O Provisionamento (IaC):** O Ops entra em cena via **Terraform**, erguendo uma infraestrutura segura e resiliente na **OCI**. Através de **Instance Principals**, a VM ganha identidade própria, eliminando a necessidade de gerenciar chaves manuais e garantindo acesso nativo e seguro ao Object Storage.
-* **⚡ A Integração & Bootstrap:** No momento do deploy, o Ops realiza o bootstrap automatizado. O Airflow assume a responsabilidade de **sincronizar e atualizar os repositórios do Core**, garantindo que a versão mais recente do código de transformação esteja sempre disponível. O repositório Core é montado como um **volume persistente** dentro dos containers, fundindo a lógica de negócio à capacidade de escala da nuvem e permitindo atualizações de lógica sem necessidade de redeploy da infraestrutura.
-* **🎼 A Orquestração (Airflow):** O **Apache Airflow** assume o papel de maestro. Ele gerencia as DAGs que executam desde a ingestão (Bridge para OCI Object Storage) até o acionamento dos módulos do Core para transformar dados brutos em insights na camada Gold, fechando o ciclo de entrega de ponta a ponta.
+> **Fase 1 (Core):**
+> * **🧠 A Engine de Processamento:** Responsável pela lógica de negócio e transformação. Atua como o **Worker** que executa a arquitetura Medallion e garante a integridade dos dados através de processamento vetorial (DuckDB). É o motor de execução agnóstico à infraestrutura, onde residem os contratos de dados e as regras de qualidade.
+
+---
+
+> **Fase 2 (Ops):**
+>* **🏗️ O Provisionamento (IaC):** O Ops entra em cena via **Terraform**, erguendo uma infraestrutura segura e resiliente na **OCI**. Através de **Instance Principals**, a VM ganha identidade própria, eliminando a necessidade de gerenciar chaves manuais e garantindo acesso nativo e seguro ao Object Storage.
+>* **⚡ A Integração & Bootstrap:** No momento do deploy, o Ops realiza o bootstrap automatizado utilizando **Docker Compose**. O Airflow assume a responsabilidade de sincronizar os repositórios, enquanto o **Core é montado como um volume persistente dentro dos containers (Workers)**. Isso funde a lógica de negócio à capacidade de escala da nuvem, permitindo atualizações de inteligência e transformações sem a necessidade de redeploy da infraestrutura.
+>* **🎼 A Orquestração (Airflow):** O **Apache Airflow** assume o papel de maestro. Ele gerencia as DAGs que executam desde a ingestão (Bridge para OCI Object Storage) até o acionamento dos módulos do Core para transformar dados brutos em insights na camada Gold, fechando o ciclo de entrega de ponta a ponta.
+>
+> ---
+>
+> 💡 **Nota de Decisão Arquitetural (Cloud Readiness):** 
+> Embora a OCI ofereça serviços gerenciados como *OCI Container Instances* e *OKE (Kubernetes)*, optamos estrategicamente pela execução via **Docker Compose dentro de OCI Compute**. Esta decisão foi tomada para garantir a **Portabilidade Total (Cloud Readiness)**: a solução não possui "lock-in" com serviços proprietários de orquestração da nuvem, permitindo que todo o ecossistema (Airflow + Workers + Ingestão) seja migrado para qualquer provedor Cloud ou ambiente On-premises apenas movendo o arquivo de composição, mantendo a simplicidade operacional sem sacrificar o isolamento de processos.
 
 ---
 
@@ -43,15 +53,88 @@ Para uma compreensão aprofundada de cada camada da operação, explore os guias
 * **🏗️ [Arquitetura de Dados](docs/data_architecture/README.md):** Fluxo de ingestão, camadas Medallion e governança.
 * **⚡ [Guia de Deployment](docs/setup/deployment.md):** Passo a passo para provisionamento via Terraform e ativação do ambiente.
 
+---
 
-## 🛠️ Stack Tecnológica & Hardware Strategy
+## 🛠️ Stack & Estratégia de Hardware
 
 A arquitetura de processamento foi desenhada em duas fases para otimização de performance e custos:
+
+---
 
 ### **Fase 1: Sandbox & Testes (Atual)**
 * **Shape:** `VM.Standard.A1.Flex` (ARM Ampere)
 * **Recursos:** 4 OCPUs | 24GB RAM
 * **Custo:** Always Free Tier (OCI)
+
+#### **Status do Provisionamento (via Terraform)**
+
+Atualmente, a infraestrutura de **Sandbox** está **100% consolidada** via código (IaC). Toda a camada de governança, segurança e rede já foi provisionada com sucesso. O deploy da instância de computação encontra-se aguardando disponibilidade de slots de hardware ARM no pool **Always Free** da Oracle na região `sa-saopaulo-1`.
+
+| Recurso | Status | Descrição |
+| :--- | :---: | :--- |
+| **Identity (IAM)** | 🟢 | 100% dos usuários e grupos do Squad 3 criados. |
+| **Policies** | 🟢 | Regras de RBAC e acesso ao Bucket configuradas. |
+| **Networking** | 🟢 | VCN, Subnets e Security Lists (Portas 22/8080) ativas. |
+| **Object Storage** | 🟢 | Bucket `lake-squad3` pronto para ingestão de dados. |
+| **Compute Instance**| 🟡 | Aguardando disponibilidade de recursos no Free Tier (OCI). |
+| **Data Bridge** | 🟢 | Script de ingestão MinIO → OCI Object Storage (camada Raw) finalizado. |
+
+---
+
+### 📸 Evidências de Provisionamento (Console OCI)
+
+#### 1. Governança: Usuários (IAM)
+
+*Criação de usuários individuais para garantir a rastreabilidade e o controle de ações no ambiente.*
+
+![Usuários OCI](docs/images/main/oci_sandbox/oci-iam-users.png) 
+
+---
+
+#### 2. Governança: Grupos de Trabalho
+
+*Organização dos membros em grupos para a aplicação automatizada de acessos e permissões.*
+
+![Grupos OCI](docs/images/main/oci_sandbox/oci-iam-groups.png) 
+
+---
+
+#### 3. Governança: Políticas de Acesso (Policies)
+
+*Controle de permissões configurado para garantir a segurança dos dados e dos recursos de rede.*
+
+![Policies OCI](docs/images/main/oci_sandbox/oci-iam-policies.png) 
+
+---
+
+#### 4. Rede: Virtual Cloud Network (VCN)
+
+*Infraestrutura de rede isolada, garantindo a segurança e o controle do tráfego para o Squad 3.*
+
+![VCN OCI](docs/images/main/oci_sandbox/oci-network-vcn.png)
+
+---
+
+#### 5. Rede: Subnet Pública e Roteamento
+
+*Segmentação lógica configurada para garantir a conectividade e o acesso externo ao orquestrador.*
+
+![Subnet OCI](docs/images/main/oci_sandbox/oci-network-subnet.png)
+
+---
+
+#### 6. Data Lake: OCI Object Storage
+
+*Bucket 'lake-squad3' operacional, garantindo o armazenamento e a disponibilidade de todas as camadas da Arquitetura Medallion.*
+
+![Storage OCI](docs/images/main/oci_sandbox/oci-storage.png)
+
+---
+
+#### 7. Ingestão: Data Bridge (MinIO para OCI)
+*Script de ingestão finalizado, consolidando os dados provenientes do MinIO na camada Raw do Object Storage.*
+
+![Ingestão OCI](docs/images/main/oci_sandbox/oci-storage-raw.png)
 
 ---
 
@@ -60,6 +143,7 @@ A arquitetura de processamento foi desenhada em duas fases para otimização de 
 * **Recursos:** 8 OCPUs | 64GB RAM (Escalável)
 * **Objetivo:** Alta performance para o motor DuckDB e paralelismo total de DAGs.
 
+---
 
 ## 📂 Localização dos Projetos na VM (Cloud Path)
 

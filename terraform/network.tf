@@ -43,13 +43,19 @@ resource "oci_core_default_security_list" "squad3_sl" {
   ingress_security_rules {
     protocol = "6" # TCP
     source   = "0.0.0.0/0"
-    tcp_options { min = 22 max = 22 }
+    tcp_options {
+      min = 22 
+      max = 22 
+    }
   }
 
   ingress_security_rules {
     protocol = "6" # TCP
     source   = "0.0.0.0/0"
-    tcp_options { min = 8080 max = 8080 }
+    tcp_options {
+      min = 8080 
+      max = 8080 
+    }
   }
 
   egress_security_rules {

@@ -38,6 +38,7 @@ x-airflow-common: &airflow-common
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
+    - ../ingestion:/opt/airflow/ingestion
     - ./requirements.txt:/opt/airflow/requirements.txt
     - /home/opc/app/hackathon-pod-squad3-core:/opt/airflow/core
     - ./squad3_access_keys:/opt/airflow/keys
