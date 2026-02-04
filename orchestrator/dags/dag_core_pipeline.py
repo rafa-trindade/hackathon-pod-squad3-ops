@@ -13,28 +13,15 @@ default_args = {
 with DAG(
     'dag_core_pipeline',
     default_args=default_args,
-    description='Pipeline Principal: Bronze -> Silver -> Gold (DuckDB Engine)',
+    description='Pipeline Principal: Execução unificada via script do Core',
     schedule_interval='0 2 * * *',
     catchup=False,
     tags=['core', 'medallion', 'duckdb'],
 ) as dag:
 
-    # Exemplo de execução dos módulos do Core
-    # Assume-se que o Core tem um entrypoint ou scripts específicos
-    
-    run_bronze = BashOperator(
-        task_id='process_bronze_layer',
-        bash_command='python3 /opt/airflow/core/main.py --layer bronze',
+    run_full_pipeline = BashOperator(
+        task_id='execute_unified_pipeline',
+        bash_command='bash /opt/airflow/core/bin/run_pipeline.sh',
     )
 
-    run_silver = BashOperator(
-        task_id='process_silver_layer',
-        bash_command='python3 /opt/airflow/core/main.py --layer silver',
-    )
-
-    run_gold = BashOperator(
-        task_id='process_gold_layer',
-        bash_command='python3 /opt/airflow/core/main.py --layer gold',
-    )
-
-    run_bronze >> run_silver >> run_gold
+    run_full_pipeline
