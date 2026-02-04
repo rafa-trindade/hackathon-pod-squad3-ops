@@ -53,15 +53,80 @@ Para uma compreensão aprofundada de cada camada da operação, explore os guias
 * **🏗️ [Arquitetura de Dados](docs/data_architecture/README.md):** Fluxo de ingestão, camadas Medallion e governança.
 * **⚡ [Guia de Deployment](docs/setup/deployment.md):** Passo a passo para provisionamento via Terraform e ativação do ambiente.
 
+---
 
-## 🛠️ Stack Tecnológica & Hardware Strategy
+## 🛠️ Stack & Estratégia de Hardware
 
 A arquitetura de processamento foi desenhada em duas fases para otimização de performance e custos:
+
+---
 
 ### **Fase 1: Sandbox & Testes (Atual)**
 * **Shape:** `VM.Standard.A1.Flex` (ARM Ampere)
 * **Recursos:** 4 OCPUs | 24GB RAM
 * **Custo:** Always Free Tier (OCI)
+
+#### **Status do Provisionamento (via Terraform)**
+
+Atualmente, a infraestrutura de **Sandbox** está **100% consolidada** via código (IaC). Toda a camada de governança, segurança e rede já foi provisionada com sucesso. O deploy da instância de computação encontra-se aguardando disponibilidade de slots de hardware ARM no pool **Always Free** da Oracle na região `sa-saopaulo-1`.
+
+| Recurso | Status | Descrição |
+| :--- | :---: | :--- |
+| **Identity (IAM)** | 🟢 | 100% dos usuários e grupos do Squad 3 criados. |
+| **Policies** | 🟢 | Regras de RBAC e acesso ao Bucket configuradas. |
+| **Networking** | 🟢 | VCN, Subnets e Security Lists (Portas 22/8080) ativas. |
+| **Object Storage** | 🟢 | Bucket `lake-squad3` pronto para ingestão de dados. |
+| **Compute Instance**| 🟡 | Aguardando disponibilidade de recursos no Free Tier (OCI). |
+
+---
+
+### 📸 Evidências de Provisionamento (Console OCI)
+
+#### 1. Governança: Usuários (IAM)
+
+*Criação de usuários individuais para garantir a rastreabilidade e o controle de ações no ambiente.*
+
+![Usuários OCI](docs/images/main/oci_sandbox/oci-iam-users.png) 
+
+---
+
+#### 2. Governança: Grupos de Trabalho
+
+*Organização dos membros em grupos para a aplicação automatizada de acessos e permissões.*
+
+![Grupos OCI](docs/images/main/oci_sandbox/oci-iam-groups.png) 
+
+---
+
+#### 3. Governança: Políticas de Acesso (Policies)
+
+*Controle de permissões configurado para garantir a segurança dos dados e dos recursos de rede.*
+
+![Policies OCI](docs/images/main/oci_sandbox/oci-iam-policies.png) 
+
+---
+
+#### 4. Rede: Virtual Cloud Network (VCN)
+
+*Infraestrutura de rede isolada, garantindo a segurança e o controle do tráfego para o Squad 3.*
+
+![VCN OCI](docs/images/main/oci_sandbox/oci-network-vcn.png)
+
+---
+
+#### 5. Rede: Subnet Pública e Roteamento
+
+*Segmentação lógica configurada para garantir a conectividade e o acesso externo ao orquestrador.*
+
+![Subnet OCI](docs/images/main/oci_sandbox/oci-network-subnet.png)
+
+---
+
+#### 6. Data Lake: OCI Object Storage
+
+*Bucket 'lake-squad3' operacional, garantindo o armazenamento e a disponibilidade de todas as camadas da Arquitetura Medallion.*
+
+![Storage OCI](docs/images/main/oci_sandbox/oci-storage.png)
 
 ---
 
@@ -70,6 +135,7 @@ A arquitetura de processamento foi desenhada em duas fases para otimização de 
 * **Recursos:** 8 OCPUs | 64GB RAM (Escalável)
 * **Objetivo:** Alta performance para o motor DuckDB e paralelismo total de DAGs.
 
+---
 
 ## 📂 Localização dos Projetos na VM (Cloud Path)
 
