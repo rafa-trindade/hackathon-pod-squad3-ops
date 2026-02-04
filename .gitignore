@@ -35,3 +35,5 @@ ENV/
 # --- Sistema ---
 .DS_Store
 Thumbs.db
+
+terraform/acessos_squad3/S3_COMPAT_RAFAEL.txt
