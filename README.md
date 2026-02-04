@@ -77,6 +77,7 @@ Atualmente, a infraestrutura de **Sandbox** está **100% consolidada** via códi
 | **Networking** | 🟢 | VCN, Subnets e Security Lists (Portas 22/8080) ativas. |
 | **Object Storage** | 🟢 | Bucket `lake-squad3` pronto para ingestão de dados. |
 | **Compute Instance**| 🟡 | Aguardando disponibilidade de recursos no Free Tier (OCI). |
+| **Data Bridge** | 🟢 | Script de ingestão MinIO → OCI Object Storage (camada Raw) finalizado. |
 
 ---
 
@@ -127,6 +128,13 @@ Atualmente, a infraestrutura de **Sandbox** está **100% consolidada** via códi
 *Bucket 'lake-squad3' operacional, garantindo o armazenamento e a disponibilidade de todas as camadas da Arquitetura Medallion.*
 
 ![Storage OCI](docs/images/main/oci_sandbox/oci-storage.png)
+
+---
+
+#### 7. Ingestão: Data Bridge (MinIO para OCI)
+*Script de ingestão finalizado, consolidando os dados provenientes do MinIO na camada Raw do Object Storage.*
+
+![Ingestão OCI](docs/images/main/oci_sandbox/oci-storage-raw.png)
 
 ---
 
