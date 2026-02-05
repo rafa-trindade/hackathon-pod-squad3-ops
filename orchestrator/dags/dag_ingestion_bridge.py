@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 import sys
 import os
 
-# Garante que o Airflow encontre o módulo de ingestão
 sys.path.append('/opt/airflow')
+
 from ingestion.minio_to_oci import sync_minio_to_oci
 
 default_args = {
