@@ -144,10 +144,15 @@ Atualmente, a infraestrutura de **Sandbox** está **100% consolidada** via códi
 
 ---
 
-## 📂 Organização Cloud Path (VM OCI)
+## 📂 Localização dos Projetos na VM (Cloud Path)
 
-Para garantir a separação de responsabilidades no sistema de arquivos da VM:
+Após o provisionamento e o bootstrap via `cloud-init`, os projetos são organizados para garantir a separação entre orquestração e processamento:
 
-- **⚙️ Camada Ops:** `/home/opc/app/hackathon-pod-squad3-ops/` (Docker, DAGs, IaC).
-- **🔐 Camada Core:** `/home/opc/app/hackathon-pod-squad3-core/` (Engine de Processamento, Arquitetura Medallion).
-- **⚡ Temp Path:** `/mnt/nvme/duckdb_temp` (Processamento Vetorizado).
+* **📍 Raiz da Aplicação:** `/home/opc/app/`
+* **⚙️ Camada Ops (Orquestração):** `/home/opc/app/hackathon-pod-squad3-ops/`
+    * _Residência de Dockerfiles, Airflow DAGs e scripts de ingestão._
+* **🔐 Camada Core (Processamento):** `/home/opc/app/hackathon-pod-squad3-core/`
+    * _Residência do motor DuckDB e regras de governança (Medallion)._
+* **⚡ Temp Path:** `/mnt/nvme/duckdb_temp`
+    * _Diretório temporário em NVMe dedicado a operações intermediárias do DuckDB (spill, sort, joins pesados)._
+
