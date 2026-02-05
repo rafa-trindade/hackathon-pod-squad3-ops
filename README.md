@@ -72,11 +72,12 @@ Atualmente, a infraestrutura de **Sandbox** está **100% consolidada** via códi
 
 | Recurso | Status | Descrição |
 | :--- | :---: | :--- |
-| **Identity (IAM)** | 🟢 | Usuários e grupos do Squad 3 com políticas RBAC ativas. |
-| **Networking** | 🟢 | VCN e Subnets configuradas para isolamento de tráfego. |
+| **Identity (IAM)** | 🟢 | Dynamic Groups e Políticas de Instance Principal ativos. |
+| **Networking** | 🟢 | VCN, Subnets e Security Lists provisionadas via Terraform. |
 | **Object Storage** | 🟢 | Bucket `lake-squad3` operacional (Camadas Medallion). |
-| **Compute Instance**| 🟡 | Aguardando disponibilidade ARM (A1.Flex) no Free Tier OCI. |
-| **Data Bridge** | 🟢 | Script de ingestão Raw (MinIO → OCI) finalizado e testado. |
+| **Compute Instance**| 🟢 | Configurada com Cloud-Init para Docker e DuckDB Temp. |
+| **Data Bridge** | 🟢 | Script de ingestão Raw (MinIO → OCI) validado e funcional. |
+| **Orchestration** | 🟢 | Airflow configurado com injeção dinâmica de `.env` para o Core. |
 
 ---
 
