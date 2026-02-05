@@ -1,14 +1,21 @@
 import os
 import logging
+import sys
+from pathlib import Path
+from dotenv import load_dotenv
+
+env_path = Path(__file__).parent.parent / "orchestrator" / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
+else:
+    load_dotenv()
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from ingestion.utils.connections import (
     get_s3_client_minio,
     get_s3_client_oci,
 )
-
-from dotenv import load_dotenv
-from pathlib import Path
-
-load_dotenv(Path("orchestrator/.env"))
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -53,6 +60,7 @@ def sync_minio_to_oci():
 
     except Exception as e:
         logger.error(f"❌ Erro crítico na migração: {str(e)}")
+        raise 
 
 if __name__ == "__main__":
     sync_minio_to_oci()
