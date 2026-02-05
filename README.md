@@ -72,12 +72,11 @@ Atualmente, a infraestrutura de **Sandbox** está **100% consolidada** via códi
 
 | Recurso | Status | Descrição |
 | :--- | :---: | :--- |
-| **Identity (IAM)** | 🟢 | 100% dos usuários e grupos do Squad 3 criados. |
-| **Policies** | 🟢 | Regras de RBAC e acesso ao Bucket configuradas. |
-| **Networking** | 🟢 | VCN, Subnets e Security Lists (Portas 22/8080) ativas. |
-| **Object Storage** | 🟢 | Bucket `lake-squad3` pronto para ingestão de dados. |
-| **Compute Instance**| 🟡 | Aguardando disponibilidade de recursos no Free Tier (OCI). |
-| **Data Bridge** | 🟢 | Script de ingestão MinIO → OCI Object Storage (camada Raw) finalizado. |
+| **Identity (IAM)** | 🟢 | Usuários e grupos do Squad 3 com políticas RBAC ativas. |
+| **Networking** | 🟢 | VCN e Subnets configuradas para isolamento de tráfego. |
+| **Object Storage** | 🟢 | Bucket `lake-squad3` operacional (Camadas Medallion). |
+| **Compute Instance**| 🟡 | Aguardando disponibilidade ARM (A1.Flex) no Free Tier OCI. |
+| **Data Bridge** | 🟢 | Script de ingestão Raw (MinIO → OCI) finalizado e testado. |
 
 ---
 
@@ -145,12 +144,10 @@ Atualmente, a infraestrutura de **Sandbox** está **100% consolidada** via códi
 
 ---
 
-## 📂 Localização dos Projetos na VM (Cloud Path)
+## 📂 Organização Cloud Path (VM OCI)
 
-Após o provisionamento e o bootstrap via `cloud-init`, os projetos são organizados para garantir a separação entre orquestração e processamento:
+Para garantir a separação de responsabilidades no sistema de arquivos da VM:
 
-* **📍 Raiz da Aplicação:** `/home/opc/app/`
-* **⚙️ Camada Ops (Orquestração):** `/home/opc/app/hackathon-pod-squad3-ops/`
-    * _Residência de Dockerfiles, Airflow DAGs e scripts de ingestão._
-* **🔐 Camada Core (Processamento):** `/home/opc/app/hackathon-pod-squad3-core/`
-    * _Residência do motor DuckDB e regras de governança (Medallion)._
+- **⚙️ Camada Ops:** `/home/opc/app/hackathon-pod-squad3-ops/` (Docker, DAGs, IaC).
+- **🔐 Camada Core:** `/home/opc/app/hackathon-pod-squad3-core/` (Engine de Processamento, Arquitetura Medallion).
+- **⚡ Temp Path:** `/mnt/nvme/duckdb_temp` (Processamento Vetorizado).
