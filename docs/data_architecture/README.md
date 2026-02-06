@@ -13,7 +13,9 @@ Para atingir a máxima maturidade arquitetural, separamos a **Inteligência** da
 
 ![OCI](../images/data_architecture/cloud_readiness_oci.png) 
 
-> 💡 **Decisão Estratégica de Portabilidade:** Optamos pelo deploy via **Docker Compose dentro de OCI Compute**. Isso garante portabilidade total: o ecossistema pode ser migrado para qualquer nuvem ou ambiente local apenas movendo o arquivo de composição, sem "lock-in" com serviços proprietários.
+> 💡 **Nota de Decisão Arquitetural (Cloud Readiness):** 
+> Embora a OCI ofereça serviços gerenciados como *OCI Container Instances* e *OKE (Kubernetes)*, optamos estrategicamente pela execução via **Docker Compose dentro de OCI Compute**. Esta decisão foi tomada para garantir a **Portabilidade Total (Cloud Readiness)**: a solução não possui "lock-in" com serviços proprietários de orquestração da nuvem, permitindo que todo o ecossistema (Airflow + Workers + Ingestão) seja migrado para qualquer provedor Cloud ou ambiente On-premises apenas movendo o arquivo de composição, mantendo a simplicidade operacional sem sacrificar o isolamento de processos.
+
 
 ---
 
