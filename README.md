@@ -49,8 +49,8 @@ A arquitetura separa a **engine de processamento** da **sustentação de infraes
 
 Para uma compreensão aprofundada de cada camada da operação, explore os guias detalhados abaixo:
 
-* **☁️ [Infraestrutura Cloud](docs/infrastructure/architecture.md):** Detalhamento da rede, segurança (IAM/Instance Principal) e hardware.
-* **🏗️ [Arquitetura de Dados](docs/data_architecture/README.md):** Fluxo de ingestão, camadas Medallion e governança.
+* **🏗️ [Arquitetura de Dados](docs/data_architecture/README.md):** Implementação da Arquitetura Cloud Readiness (Core → Ops)
+* **☁️ [Infraestrutura Cloud](docs/infrastructure/README.md):** Detalhamento da infraestrutura cloud: rede, segurança (IAM/Instance Principal) e compute.
 * **⚡ [Guia de Deployment](docs/setup/deployment.md):** Passo a passo para provisionamento via Terraform e ativação do ambiente.
 
 ---
