@@ -1,21 +1,43 @@
 #!/bin/bash
 # ==============================================================================
-# SQUAD 3 - HEALTH CHECK & CLOUD READINESS VERIFICATION
+# SQUAD 3 - HEALTH CHECK & CLOUD READINESS VERIFICATION (VERSÃO UBUNTU)
 # Objetivo: Validar se o Bootstrap foi concluído com sucesso
 # ==============================================================================
 
 echo "--- [1/1] Verificando Prontidão da Instância ---"
+echo ""
 
-docker --version && echo "✅ Docker instalado" || echo "❌ Docker ausente"
+check() {
+    if [ $? -eq 0 ]; then
+        echo "✅ $1"
+    else
+        echo "❌ $2"
+    fi
+}
 
-docker compose version && echo "✅ Docker Compose instalado" || echo "❌ Docker Compose ausente"
+# 1. Docker instalado?
+docker --version &> /dev/null
+check "Docker instalado" "Docker NÃO encontrado."
 
-groups opc | grep -q docker && echo "✅ Permissões de usuário (opc) OK" || echo "⚠️ Usuário precisa relogar para assumir grupo docker"
+# 2. Docker Compose instalado?
+docker compose version &> /dev/null
+check "Docker Compose instalado" "Docker Compose NÃO encontrado."
 
-[ -d "/home/opc/app" ] && echo "✅ Estrutura de pastas /app OK" || echo "❌ Estrutura de pastas ausente"
+# 3. Permissões do usuário?
+groups ubuntu | grep -q docker
+check "Permissões de usuário (ubuntu) para Docker OK" "Permissões do Docker para o usuário 'ubuntu' ausentes. Tente relogar (exit e ssh novamente)."
 
-ping -c 1 google.com &> /dev/null && echo "✅ Conectividade com Internet OK" || echo "❌ Sem acesso à Internet"
+# 4. Estrutura de pastas?
+[ -d "/home/ubuntu/app" ]
+check "Estrutura de pastas /home/ubuntu/app OK" "Estrutura de pastas /home/ubuntu/app ausente."
 
-[ -d "/tmp/duckdb_storage" ] && echo "✅ Cache DuckDB (/tmp/duckdb_storage) OK" || echo "❌ Cache DuckDB ausente"
+# 5. Conectividade com a Internet?
+ping -c 1 google.com &> /dev/null
+check "Conectividade com a Internet OK" "Sem acesso à Internet."
 
-echo "--- BOOTSTRAP VERIFICADO COM SUCESSO ---"
+# 6. Diretório temporário do DuckDB?
+[ -d "/mnt/nvme/duckdb_temp" ]
+check "Diretório temporário do DuckDB (/mnt/nvme/duckdb_temp) OK" "Diretório temporário do DuckDB ausente."
+
+echo ""
+echo "--- VERIFICAÇÃO CONCLUÍDA ---"
