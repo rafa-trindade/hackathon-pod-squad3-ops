@@ -67,7 +67,6 @@ locals {
   membros_analytics = {
     "lucas"   = "analytics-lucas-squad3"
     "carlos"  = "analytics-carlos-squad3"
-    "gabriel" = "analytics-gabriel-squad3"
     "lazza"   = "analytics-lazza-squad3"
     "gustavo" = "analytics-gustavo-squad3"
     "michele" = "analytics-michele-squad3"

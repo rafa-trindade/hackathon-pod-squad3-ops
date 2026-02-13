@@ -8,12 +8,36 @@ resource "oci_core_vcn" "squad3_vcn" {
   cidr_block     = "10.0.0.0/16"
   display_name   = "squad3-vcn"
   dns_label      = "squad3"
+
+  freeform_tags = {
+    environment = "dev"
+    squad       = "3"
+  }
+
 }
 
 resource "oci_core_internet_gateway" "igw" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.squad3_vcn.id
   display_name   = "squad3-igw"
+}
+
+resource "oci_core_nat_gateway" "nat_gw" {
+  compartment_id = var.compartment_id
+  vcn_id         = oci_core_vcn.squad3_vcn.id
+  display_name   = "squad3-nat-gateway"
+}
+
+resource "oci_core_route_table" "private_rt" {
+  compartment_id = var.compartment_id
+  vcn_id         = oci_core_vcn.squad3_vcn.id
+  display_name   = "squad3-private-rt"
+
+  route_rules {
+    destination       = "0.0.0.0/0"
+    destination_type  = "CIDR_BLOCK"
+    network_entity_id = oci_core_nat_gateway.nat_gw.id
+  }
 }
 
 resource "oci_core_default_route_table" "rt" {
@@ -36,12 +60,23 @@ resource "oci_core_subnet" "public_subnet" {
   route_table_id    = oci_core_vcn.squad3_vcn.default_route_table_id
 }
 
+resource "oci_core_subnet" "private_subnet" {
+  compartment_id    = var.compartment_id
+  vcn_id            = oci_core_vcn.squad3_vcn.id
+  cidr_block        = "10.0.2.0/24"
+  display_name      = "squad3-private-subnet"
+  dns_label         = "private"
+  prohibit_public_ip_on_vnic = true
+  route_table_id    = oci_core_route_table.private_rt.id
+}
+
+
 resource "oci_core_default_security_list" "squad3_sl" {
   manage_default_resource_id = oci_core_vcn.squad3_vcn.default_security_list_id
   display_name               = "squad3-security-list"
 
   ingress_security_rules {
-    protocol = "6" # TCP
+    protocol = "6"
     source   = "0.0.0.0/0"
     tcp_options {
       min = 22 
@@ -50,7 +85,7 @@ resource "oci_core_default_security_list" "squad3_sl" {
   }
 
   ingress_security_rules {
-    protocol = "6" # TCP
+    protocol = "6"
     source   = "0.0.0.0/0"
     tcp_options {
       min = 8080 

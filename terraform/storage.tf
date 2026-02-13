@@ -5,7 +5,7 @@
 
 resource "oci_objectstorage_bucket" "lake_squad3" {
   compartment_id = var.compartment_id
-  name           = "lake-squad3"
+  name           = "lake"
   namespace      = var.os_namespace
   storage_tier   = "Standard"
   versioning     = "Enabled"
