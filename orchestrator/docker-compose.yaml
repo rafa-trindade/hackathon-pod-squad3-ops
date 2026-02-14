@@ -3,7 +3,6 @@
 # SQUAD 3 - ORCHESTRATION ENGINE (AIRFLOW STACK)
 # Objetivo: Sustentação operacional dos pipelines via Docker Compose
 # ==============================================================================
-
 x-airflow-common: &airflow-common
   image: apache/airflow:${AIRFLOW_IMAGE_TAG:-2.7.1}
   environment:
