@@ -46,7 +46,7 @@ x-airflow-common: &airflow-common
     - ./plugins:/opt/airflow/plugins
     - ../ingestion:/opt/airflow/ingestion
     - ./requirements.txt:/opt/airflow/requirements.txt
-    - /home/opc/app/hackathon-pod-squad3-core:/opt/airflow/core
+    - /home/ubuntu/app/hackathon-pod-squad3-core:/opt/airflow/core
     - ./squad3_access_keys:/opt/airflow/keys
     - /mnt/nvme/duckdb_temp:/mnt/nvme/duckdb_temp
     
