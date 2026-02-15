@@ -1,12 +1,13 @@
 # ==============================================================================
-# SQUAD 3 - IDENTITY & ACCESS MANAGEMENT (IAM) STRATEGY
-# Objetivo: Instance Principal para a VM e Gestão de Usuários Reais
+# SQUAD 3 - IDENTITY AND ACCESS MANAGEMENT (OPS ENGINE)
+# Objetivo: Definir a estratégia de IAM para o ambiente de orquestração e integração
 # ==============================================================================
 
 # ==============================================================================
 # 1. AUTOMAÇÃO: INSTANCE PRINCIPAL (VM -> BUCKET)
 # ==============================================================================
 
+# Criar um Dynamic Group para a instância do Airflow, permitindo que ela tenha permissões específicas para acessar o bucket do Data Lake
 resource "oci_identity_dynamic_group" "compute_dg" {
   compartment_id = var.tenancy_ocid
   name           = "squad3-compute-dg"
@@ -14,6 +15,7 @@ resource "oci_identity_dynamic_group" "compute_dg" {
   matching_rule  = "ALL {instance.id = '${oci_core_instance.airflow_instance.id}'}"
 }
 
+# Política para permitir que a VM gerencie os objetos no bucket do Data Lake
 resource "oci_identity_policy" "lake_access_policy" {
   name           = "squad3-vm-to-lake-policy"
   description    = "Permissoes automaticas para a VM gerenciar o Data Lake"
@@ -29,12 +31,13 @@ resource "oci_identity_policy" "lake_access_policy" {
 # 2. HUMANOS: GRUPOS E MEMBROS
 # ==============================================================================
 
-# --- GRUPOS ---
+# Criação de grupo para Engenheiros de Dados
 resource "oci_identity_group" "eng_group" {
   name        = "squad3-eng-group"
   description = "Engenheiros de Dados - Squad 3"
 }
 
+# Criação de grupo para Analistas e Cientistas de Dados
 resource "oci_identity_group" "analytics_group" {
   name        = "squad3-analytics-group"
   description = "Cientistas e Analistas de Dados - Squad 3"
@@ -49,6 +52,7 @@ locals {
   }
 }
 
+# Criação dos usuários engenheiros
 resource "oci_identity_user" "engineers" {
   for_each    = local.membros_eng
   name        = each.value
@@ -56,6 +60,7 @@ resource "oci_identity_user" "engineers" {
   email       = "${each.key}@squad3-ops.com"
 }
 
+# Associação dos usuários engenheiros ao grupo de engenharia
 resource "oci_identity_user_group_membership" "add_engineers" {
   for_each = local.membros_eng
   group_id = oci_identity_group.eng_group.id
@@ -73,6 +78,7 @@ locals {
   }
 }
 
+# Criação dos usuários analistas
 resource "oci_identity_user" "analysts" {
   for_each    = local.membros_analytics
   name        = each.value
@@ -80,6 +86,7 @@ resource "oci_identity_user" "analysts" {
   email       = "${each.key}@squad3-ops.com"
 }
 
+# Associação dos usuários analistas ao grupo de analytics
 resource "oci_identity_user_group_membership" "add_analysts" {
   for_each = local.membros_analytics
   group_id = oci_identity_group.analytics_group.id
@@ -90,6 +97,7 @@ resource "oci_identity_user_group_membership" "add_analysts" {
 # 3. POLÍTICAS DE ACESSO HUMANO (ENGENHARIA E ANALYTICS)
 # ==============================================================================
 
+# Política de acesso para os membros humanos da Squad 3
 resource "oci_identity_policy" "human_access_policy" {
   compartment_id = var.compartment_id
   name           = "squad3-human-access-policy"
@@ -113,12 +121,14 @@ locals {
   todos_membros = merge(local.membros_eng, local.membros_analytics)
 }
 
+# Gerar chaves privadas e API Keys para todos os membros da Squad 3
 resource "tls_private_key" "all_user_keys" {
   for_each  = local.todos_membros
   algorithm = "RSA"
   rsa_bits  = 2048
 }
 
+# Criar API Keys no OCI para cada usuário, associando a chave pública gerada
 resource "oci_identity_api_key" "all_api_keys" {
   for_each  = local.todos_membros
   key_value = tls_private_key.all_user_keys[each.key].public_key_pem
@@ -126,6 +136,7 @@ resource "oci_identity_api_key" "all_api_keys" {
   user_id   = contains(keys(local.membros_eng), each.key) ? oci_identity_user.engineers[each.key].id : oci_identity_user.analysts[each.key].id
 }
 
+# Salvar as chaves privadas em arquivos locais para cada usuário (ex: eng-rafael-squad3.pem)
 resource "local_file" "save_pem_keys" {
   for_each = local.todos_membros
   content  = tls_private_key.all_user_keys[each.key].private_key_pem
@@ -136,11 +147,13 @@ resource "local_file" "save_pem_keys" {
 # 5. CREDENCIAIS S3 COMPAT (DUCKDB / MASTER)
 # ==============================================================================
 
+# Gerar uma chave secreta para o usuário Rafael (Engenheiro de Dados) para acesso S3 compatível com DuckDB
 resource "oci_identity_customer_secret_key" "rafael_s3_key" {
   display_name = "s3-compat-key-rafael"
   user_id      = oci_identity_user.engineers["rafael"].id
 }
 
+# Salvar as credenciais S3 compatíveis em um arquivo local para uso no .env do Airflow e DuckDB
 resource "local_file" "s3_credentials_file" {
   content  = <<EOT
 # --- CREDENCIAIS PARA O .ENV DO CORE (DUCKDB) ---
