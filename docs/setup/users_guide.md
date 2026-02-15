@@ -7,9 +7,7 @@ _Plataforma em Oracle Cloud Infrastructure (OCI)_
 
 Este guia explica como:
 
-1. Acessar o OCI Data Science  
-2. Criar/abrir Notebook Session  
-3. Ler dados do Object Storage  
+1. Ler dados do Object Storage  
 
 ---
 
@@ -59,8 +57,6 @@ Clique em **Open**
 
 O ambiente já estará autenticado via IAM.
 
-⚠️ Você NÃO precisa configurar chave privada nem API Key.
-
 ---
 
 # 📦 4️⃣ Lendo Dados do Object Storage
@@ -102,12 +98,3 @@ Seu perfil permite:
 ❌ Não permite deletar
 
 Isso garante governança e integridade dos dados.
-
-
-### 🚫 O que você NÃO precisa
-
-- Não precisa de API Key
-- Não precisa de chave privada
-- Não precisa de credencial S3
-- Não precisa configurar nada localmente
-- Tudo funciona direto no ambiente gerenciado da OCI.
