@@ -103,5 +103,3 @@ docker compose up airflow-init
 # Inicie todos os outros serviços do Airflow em background
 docker compose up -d
 ```
-
-
