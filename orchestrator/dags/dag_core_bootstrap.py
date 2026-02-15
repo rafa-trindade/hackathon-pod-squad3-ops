@@ -2,7 +2,7 @@
 # DAG: core_bootstrap
 # Descrição: Configuração inicial do repositório Core e ambiente de execução
 # Objetivo: Deploy do repositório Core, instalação de dependências e configuração do ambiente (.env)
-# Agendamento: Semanalmente, toda segunda-feira às 3h da manhã (UTC)
+# Agendamento: Semanalmente, toda segunda-feira às 3h da manhã (UTC) 
 # ==============================================================================
 from airflow import DAG
 from airflow.operators.bash import BashOperator
