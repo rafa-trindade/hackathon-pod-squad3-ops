@@ -1,10 +1,10 @@
-
 # ==============================================================================
-# SQUAD 3 - ORCHESTRATION ENGINE (AIRFLOW STACK)
+# SQUAD 3 - DOCKER COMPOSE PARA ORQUESTRAÇÃO DE PIPELINES (OPS ENGINE)
 # Objetivo: Sustentação operacional dos pipelines via Docker Compose
 # ==============================================================================
 x-airflow-common: &airflow-common
-  image: apache/airflow:${AIRFLOW_IMAGE_TAG:-2.7.1}
+  build: .
+  image: squad3-airflow-custom:latest
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -48,6 +48,7 @@ x-airflow-common: &airflow-common
     - /home/ubuntu/app/hackathon-pod-squad3-core:/opt/airflow/core
     - ./squad3_access_keys:/opt/airflow/keys
     - /mnt/nvme/duckdb_temp:/mnt/nvme/duckdb_temp
+    - ./ssh_keys:/home/airflow/.ssh
     
   user: "${AIRFLOW_UID:-1000}:0"
   depends_on:
