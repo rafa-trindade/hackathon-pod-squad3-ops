@@ -18,7 +18,8 @@ secrets.py
 .env
 
 # --- Docker & Airflow ---
-logs/
+*.log
+*latest
 airflow-webserver.pid
 standalone_admin_password.txt
 unittests.cfg
@@ -37,3 +38,6 @@ ENV/
 Thumbs.db
 
 terraform/acessos_squad3/S3_COMPAT_RAFAEL.txt
+
+*id_ed25519
+*known_hosts
