@@ -1,12 +1,14 @@
 # ==============================================================================
 # SQUAD 3 - COMPUTE INSTANCE STRATEGY (OPS ENGINE)
-# Objetivo: Provisionar a VM de processamento e orquestração (Airflow/Docker)
+# Objetivo: Definir a infraestrutura de computação para o ambiente de orquestração e integração
 # ==============================================================================
 
+# Consulta para obter as Availability Domains disponíveis no Compartimento
 data "oci_identity_availability_domains" "ads" {
   compartment_id = var.compartment_id
 }
 
+# Consulta para obter a imagem mais recente do Ubuntu 22.04 para a forma VM.Standard.E3.Flex
 data "oci_core_images" "latest_ubuntu" { 
   compartment_id         = var.compartment_id
   operating_system         = "Canonical Ubuntu" 
@@ -17,7 +19,7 @@ data "oci_core_images" "latest_ubuntu" {
   sort_order = "DESC"
 }
 
-# --- CORE AIRFLOW VM ---
+# Instância de processamento e orquestração (Airflow/Docker)
 resource "oci_core_instance" "airflow_instance" {
   depends_on = [oci_core_subnet.public_subnet]
 
