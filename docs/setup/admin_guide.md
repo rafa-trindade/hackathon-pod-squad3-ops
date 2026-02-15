@@ -8,10 +8,9 @@ _Plataforma em Oracle Cloud Infrastructure (OCI)_
 Este guia descreve o passo a passo para:
 
 1. Validar criação do usuário via Terraform
-2. Inserir usuário no grupo correto
-3. Criar senha temporária
-4. Validar permissões
-5. Enviar credenciais ao cientista
+2. Criar senha temporária
+3. Validar permissões
+4. Enviar credenciais ao analistas/cientistas
 
 ---
 
@@ -36,7 +35,7 @@ Selecionar usuário → **Groups**
 
 Confirme que o usuário está no grupo correto, por exemplo:
 
-- `data-science`
+- `analytics_group`
 
 Caso não esteja:
 
@@ -53,14 +52,12 @@ Menu → Identity & Security → **Policies**
 Confirme que o grupo possui políticas como:
 
 ```text
-Allow group data-science to read buckets in compartment <compartment_name>
-Allow group data-science to read objects in compartment <compartment_name>
-Allow group data-science to manage data-science-family in compartment <compartment_name>
+Allow group squad3-analytics-group to read objects in compartment <compartment_name>
+Allow group squad3-analytics-group to inspect buckets in compartment <compartment_name>
 ```
 
 Sem essas políticas o usuário não conseguirá:
 
-- Criar Notebook Session
 - Ler Object Storage
 
 ---
@@ -113,8 +110,6 @@ Enviar:
 - Username
 - Senha temporária
 
-Recomenda-se enviar senha por canal separado.
-
 ---
 
 # ✅ 7️⃣ Checklist Final
@@ -128,22 +123,3 @@ Antes de considerar o acesso concluído:
 ✔ Compartimento validado  
 ✔ Serviço Data Science disponível no compartment  
 
----
-
-# 🛡️ Boas Práticas
-
-- Não compartilhar arquivos `.pem`
-- Não gerar API Key para cientistas que usarão apenas Notebook
-- Utilizar princípio de menor privilégio
-- Evitar envio de credenciais por canais inseguros
-
----
-
-## 🎯 Resultado Esperado
-
-Após esses passos, o cientista conseguirá:
-
-✔ Acessar o console OCI  
-✔ Criar Notebook Session  
-✔ Ler dados do Object Storage  
-✔ Trabalhar dentro do modelo de governança definido
