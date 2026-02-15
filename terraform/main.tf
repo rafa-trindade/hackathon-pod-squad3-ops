@@ -1,8 +1,9 @@
 # ==============================================================================
-# SQUAD 3 - PROVIDOR STRATEGY
-# Objetivo: Configurar a conexão com a API da Oracle Cloud
+# SQUAD 3 - PROVIDER CONFIGURATION (OPS ENGINE)
+# Objetivo: Configurar o provider OCI para autenticação e conexão com a API da Oracle Cloud
 # ==============================================================================
 
+# Configuração do provider OCI para autenticação e conexão com a API da Oracle Cloud
 provider "oci" {
   tenancy_ocid     = var.tenancy_ocid
   user_ocid        = var.user_ocid
