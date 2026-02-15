@@ -40,19 +40,19 @@ A arquitetura separa a **engine de processamento** da **sustentação de infraes
 ### 📖 Navegação Técnica (Documentação)
 
 ### 🏗️ Arquitetura de Dados e Cloud Readiness
-> 📑 [`docs/data_architecture/*`](docs/data_architecture/README.md)  
+> 📑 [`docs/data_architecture/`](docs/data_architecture/README.md)  
 > **Consolida** a estratégia de separação entre o motor de processamento agnóstico (Core/DuckDB) e a plataforma de execução (Ops/OCI). **Define** as 4 fases do ciclo de vida operacional - do provisionamento à orquestração - garantindo portabilidade total via Docker Compose e segurança nativa através de *Instance Principals*.
 
 ---
 
 ### ☁️ Infraestrutura como Código (IaC)
-> 📑 [`docs/infrastructure/*`](docs/infrastructure/README.md)  
+> 📑 [`docs/infrastructure/`](docs/infrastructure/README.md)  
 > **Consolida** o provisionamento automatizado da stack tecnológica na Oracle Cloud via Terraform. **Define** a topologia de rede (VCN/Subnets), o armazenamento em Object Storage e a configuração de instâncias otimizadas para alta performance in-memory, utilizando *Cloud-Init* para o bootstrap imediato do ambiente.
 
 ---
 
 ### ⚡ Orquestração e Observabilidade
-> 📑 [`docs/orchestrator/*`](docs/orchestrator/README.md)  
+> 📑 [`docs/orchestrator/`](docs/orchestrator/README.md)  
 > **Consolida** o Workflow Management através do Apache Airflow, governando o ciclo de vida das DAGs de bootstrap, ingestão e pipeline. **Define** o controle de linhagem via Run ID e a automação da política de retenção das camadas Medallion, integrando telemetria em tempo real através do Painel de Observabilidade (Streamlit).
 
 ---
