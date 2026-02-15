@@ -1,8 +1,9 @@
 # ==============================================================================
-# SQUAD 3 - DATA LAKE STORAGE STRATEGY (OBJECT STORAGE)
-# Objetivo: Provisionar o Bucket para suporte à Arquitetura Medallion
+# SQUAD 3 - STORAGE STRATEGY (OPS ENGINE)
+# Objetivo: Definir a estratégia de armazenamento para o ambiente de orquestração e integração
 # ==============================================================================
 
+# Criar um bucket no Object Storage para servir como Data Lake, com versionamento habilitado para garantir a integridade e histórico dos dados
 resource "oci_objectstorage_bucket" "lake_squad3" {
   compartment_id = var.compartment_id
   name           = "lake"
