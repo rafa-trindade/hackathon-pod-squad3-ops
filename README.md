@@ -37,14 +37,6 @@ A arquitetura separa a **engine de processamento** da **sustentação de infraes
 
 ---
 
-### 📋 Governança Operacional (Gestão de Backlog)
-
->A governança das atividades é realizada por meio de quadros Kanban no **GitHub Projects**, integrando planejamento execução e versionamento. Esta divisão garante especialização técnica e transparência no progresso das frentes:   
->
-> * 🚦 **GitHub Projects:** [`squad3-analytics`](https://github.com/users/rafa-trindade/projects/6) | [`squad3-engineering-core`](https://github.com/users/rafa-trindade/projects/4) | [`squad3-engineering-ops`](https://github.com/users/rafa-trindade/projects/8)
-
----
-
 ### 📖 Navegação Técnica (Documentação)
 
 ### 🏗️ Arquitetura de Dados e Cloud Readiness
@@ -70,6 +62,14 @@ A arquitetura separa a **engine de processamento** da **sustentação de infraes
 > **Consolida** os procedimentos operacionais para deploy da infraestrutura e configuração do ambiente de orquestração. **Define** os protocolos de segurança para administração de identidades (IAM) na OCI e fornece guias de integração para usuários de dados, garantindo o isolamento de perfis entre engenharia e analytics.
 
 * 📑 **Guias:** [`Guia de Deploy`](docs/setup/deployment.md) | [`Guia de Acessos (Admin)`](docs/setup/admin_guide.md) | [`Guia do Usuário (Analytics)`](docs/setup/users_guide.md)
+
+---
+
+### 📋 Governança Operacional (Gestão de Backlog)
+
+>A governança das atividades é realizada por meio de quadros Kanban no **GitHub Projects**, integrando planejamento execução e versionamento. Esta divisão garante especialização técnica e transparência no progresso das frentes:   
+>
+> * 🚦 **GitHub Projects:** [`squad3-analytics`](https://github.com/users/rafa-trindade/projects/6) | [`squad3-engineering-core`](https://github.com/users/rafa-trindade/projects/4) | [`squad3-engineering-ops`](https://github.com/users/rafa-trindade/projects/8)
 
 ---
 
