@@ -1,9 +1,9 @@
 # ==============================================================================
-# SQUAD 3 - TERRAFORM VARIABLES DEFINITION
-# Objetivo: Parametrização da infraestrutura para garantir portabilidade (Cloud Ready)
-# ==============================================================================
+# SQUAD 3 - VARIABLES CONFIGURATION (OPS ENGINE)
+# Objetivo: Definir as variáveis essenciais para a configuração e provisionamento
 
 # --- Credenciais e Conexão OCI ---
+# Variáveis para autenticação e conexão com a API da Oracle Cloud, garantindo que as credenciais sensíveis sejam mantidas fora do código-fonte e possam ser facilmente configuradas em diferentes ambientes
 variable "tenancy_ocid" {
   description = "OCID da sua conta principal (Tenancy)"
   type        = string
@@ -31,6 +31,7 @@ variable "region" {
 }
 
 # --- Organização e Recursos ---
+# Variáveis para configuração de recursos específicos, como o Compartment onde os recursos serão criados, o namespace do Object Storage e detalhes da instância de VM, permitindo flexibilidade e reutilização do código em diferentes contextos
 variable "compartment_id" {
   description = "OCID do Compartment onde os recursos serão criados"
   type        = string
@@ -42,6 +43,7 @@ variable "os_namespace" {
 }
 
 # --- Configuração da VM ---
+# Variáveis para configuração da instância de VM, como a imagem a ser utilizada e a chave SSH para acesso, permitindo que a infraestrutura seja facilmente adaptada para diferentes necessidades e ambientes
 variable "instance_image_id" {
   description = "OCID da Imagem Oracle Linux para a VM"
   type        = string
