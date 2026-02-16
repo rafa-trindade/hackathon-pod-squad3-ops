@@ -7,11 +7,14 @@
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
+import pendulum
+
+local_tz = pendulum.timezone("America/Sao_Paulo")
 
 default_args = {
     'owner': 'squad3-ops',
     'depends_on_past': False,
-    'start_date': datetime(2026, 2, 10),
+    'start_date': datetime(2026, 2, 10, tzinfo=local_tz),
     'retries': 0,
 }
 
@@ -19,10 +22,10 @@ with DAG(
     'core_bootstrap',
     default_args=default_args,
     description='Bootstrap do Repositório Core e Configuração de Ambiente (.env)',
-    schedule_interval='0 3 * * 1',
+    schedule_interval='0 6 * * 1',
     catchup=False,
     tags=['core', 'deploy'],
-    max_active_runs=1
+    max_active_runs=1,
 ) as dag:
 
     sync_core = BashOperator(

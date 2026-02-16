@@ -3,6 +3,10 @@ from airflow.operators.python import PythonOperator
 import subprocess
 import sys
 from datetime import datetime, timedelta
+import pendulum
+
+local_tz = pendulum.timezone("America/Sao_Paulo")
+
 
 def install_deps():
     try:
@@ -17,6 +21,8 @@ def run_extraction():
 
 default_args = {
     'owner': 'squad3-ops',
+    'depends_on_past': False,
+    'start_date': datetime(2026, 2, 1, tzinfo=local_tz),
     'retries': 1,
     'retry_delay': timedelta(minutes=2),
 }
@@ -24,8 +30,8 @@ default_args = {
 with DAG(
     'oci_costs_monitor',
     default_args=default_args,
-    schedule_interval='0 */12 * * *',
-    start_date=datetime(2026, 2, 1),
+    description='Sincronização de custos na Cloud OCI',
+    schedule_interval='0 */6 * * *',
     catchup=False,
     tags=['oci', 'monitoring'],
     max_active_runs=1

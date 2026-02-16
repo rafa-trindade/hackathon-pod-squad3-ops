@@ -7,11 +7,14 @@
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
+import pendulum
+
+local_tz = pendulum.timezone("America/Sao_Paulo")
 
 default_args = {
     'owner': 'squad3-ops',
     'depends_on_past': False,
-    'start_date': datetime(2026, 2, 1),
+    'start_date': datetime(2026, 2, 1, tzinfo=local_tz),
     'retries': 1,
     'retry_delay': timedelta(minutes=10),
 }
@@ -20,7 +23,7 @@ with DAG(
     'core_pipeline',
     default_args=default_args,
     description='Pipeline Principal: Execução unificada via script do Core',
-    schedule_interval='0 6 1 * *',
+    schedule_interval='0 3 1 * *',
     catchup=False,
     tags=['core', 'medallion'],
     max_active_runs=1

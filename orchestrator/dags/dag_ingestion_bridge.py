@@ -7,8 +7,11 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
+import pendulum
 import sys
 import os
+
+local_tz = pendulum.timezone("America/Sao_Paulo")
 
 sys.path.append('/opt/airflow')
 
@@ -17,7 +20,7 @@ from ingestion.minio_to_oci import sync_minio_to_oci
 default_args = {
     'owner': 'squad3-ops',
     'depends_on_past': False,
-    'start_date': datetime(2026, 2, 1),
+    'start_date': datetime(2026, 2, 1, tzinfo=local_tz),
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
 }
@@ -26,7 +29,7 @@ with DAG(
     'ingestion_bridge',
     default_args=default_args,
     description='Sync de dados Raw: MinIO (VPS) -> Object Storage (OCI)',
-    schedule_interval='0 4 1 * *', 
+    schedule_interval='0 0 1 * *', 
     catchup=False,
     tags=['ops', 'ingestion'],
     max_active_runs=1
