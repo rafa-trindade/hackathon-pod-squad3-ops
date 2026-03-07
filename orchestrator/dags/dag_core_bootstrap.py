@@ -56,16 +56,32 @@ DUCKDB_MEMORY_LIMIT=48GB
 DUCKDB_THREADS=12
 
 # Política de Retenção
-BRONZE_MAX_RUNS=2
-SILVER_MAX_RUNS=2
-GOLD_MAX_RUNS=2
+BRONZE_MAX_RUNS=1
+SILVER_MAX_RUNS=1
+GOLD_MAX_RUNS=1
 EOT
         """,
     )
 
     install_deps = BashOperator(
         task_id='install_core_dependencies',
-        bash_command='pip install --upgrade pip && pip install -r /opt/airflow/core/requirements.txt || echo "Sem requirements no core"',
+        bash_command="""
+        set -e
+        if [ -f /opt/airflow/core/requirements.txt ]; then
+            echo "Requirements file found. Setting up virtual environment..."
+            
+            python -m venv /opt/airflow/core/venv
+            
+            source /opt/airflow/core/venv/bin/activate
+            
+            pip install --upgrade pip
+            pip install -r /opt/airflow/core/requirements.txt
+            
+            echo "Dependências instaladas com sucesso em /opt/airflow/core/venv"
+        else
+            echo "Sem requirements no core"
+        fi
+        """,
     )
 
     set_permissions = BashOperator(
